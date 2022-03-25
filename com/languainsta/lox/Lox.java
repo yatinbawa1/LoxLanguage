@@ -56,15 +56,15 @@ public class Lox {
     }
 
     // Error function
-    static void error(int line,String message) {
-        report(line,"",message);
+    static void error(int line,String Where,String message) {
+        report(line,Where,message);
     }
 
     // Report Function for errors and such
     private static void report(int line, String where,
                                String message) {
         System.err.println(
-                "[line " + line + "] Error" + where + ": " + message);
+                "[line " + line + "] Error " + where + ": " + message);
         hadError = true;
     }
 }
