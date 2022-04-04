@@ -24,7 +24,7 @@ public class GenerateAst {
             List<String> types) throws IOException {
         String path =  outputDir + "/" + baseName + ".java";
         PrintWriter writer = new PrintWriter(path, "UTF-8");
-        writer.println("package com.languainsta.lox");
+        writer.println("package com.languainsta.lox;");
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
@@ -47,6 +47,8 @@ public class GenerateAst {
 
     public static void defineVisitor(PrintWriter writer, String baseName
                         ,List<String> types) {
+
+        writer.println("  interface Visitor<R> {");
         for (String type: types) {
             String typeName = type.split(":")[0].trim();
             writer.println("    R visit" + typeName + baseName + "(" +
@@ -71,11 +73,11 @@ public class GenerateAst {
 
         // Visitor pattern.
         writer.println();
-        writer.println("    @Override");
-        writer.println("    <R> R accept(Visitor<R> visitor) {");
-        writer.println("      return visitor.visit" +
+        writer.println("        @Override");
+        writer.println("        <R> R accept(Visitor<R> visitor) {");
+        writer.println("            return visitor.visit" +
                 className + baseName + "(this);");
-        writer.println("    }");
+        writer.println("        }");
 
         // fields
         for (String field: fields) {
