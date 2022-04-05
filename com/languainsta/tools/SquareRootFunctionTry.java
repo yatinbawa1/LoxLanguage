@@ -2,6 +2,7 @@ package com.languainsta.tools;
 import java.lang.Math;
 
 public class SquareRootFunctionTry {
+
     public static void main(String[] args) {
         int l = sqrt(256);
         System.out.println(l);
