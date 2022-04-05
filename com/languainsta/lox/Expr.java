@@ -4,16 +4,17 @@ import java.util.List;
 
 abstract class Expr {
 
-
     interface Visitor<R> {
         R visitBinaryExpr(Binary expr);
         R visitGroupingExpr(Grouping expr);
         R visitLiteralExpr(Literal expr);
         R visitUnaryExpr(Unary expr);
     }
+
     abstract <R> R accept(Visitor<R> visitor);
 
-    static class Binary extends Expr{
+    static class Binary extends Expr {
+
         Binary(Expr left,Token operator,Expr right){
             this.left=left;
             this.operator=operator;
@@ -24,6 +25,7 @@ abstract class Expr {
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitBinaryExpr(this);
         }
+
         final Expr left;
         final Token operator;
         final Expr right;

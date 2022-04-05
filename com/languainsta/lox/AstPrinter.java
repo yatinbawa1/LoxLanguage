@@ -3,6 +3,7 @@ package com.languainsta.lox;
 public class AstPrinter implements Expr.Visitor<String>{
 
     public static void main(String[] args) {
+
         Expr expression = new Expr.Binary(
                 new Expr.Unary(
                         new Token(TokenType.MINUS, "-", null, 1),
@@ -44,10 +45,12 @@ public class AstPrinter implements Expr.Visitor<String>{
         StringBuilder builder = new StringBuilder();
 
         builder.append("(").append(name);
+
         for (Expr expr : exprs ) {
             builder.append(" ");
             builder.append(expr.accept(this));
         }
+
         builder.append(")");
 
         return builder.toString();
