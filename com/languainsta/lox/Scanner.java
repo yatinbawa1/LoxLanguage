@@ -89,7 +89,7 @@ public class Scanner {
                 else {
                     // where is just for show
                     // remove it later
-                    Lox.error(line,"Anywhere","Unexpected character");
+                    Lox.error(line,"Unexpected character");
                 }
             }
         }
@@ -113,7 +113,7 @@ public class Scanner {
 
         if (isAtEnd()) {
             // where is just for show
-            Lox.error(line,"Somewhere","Undetermined String");
+            Lox.error(line,"Undetermined String");
             return;
         }
 

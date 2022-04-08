@@ -56,8 +56,8 @@ public class Lox {
     }
 
     // Error function
-    static void error(int line,String Where,String message) {
-        report(line,Where,message);
+    static void error(int line,String message) {
+        report(line,"",message);
     }
 
     // Report Function for errors and such
@@ -66,5 +66,13 @@ public class Lox {
         System.err.println(
                 "[line " + line + "] Error " + where + ": " + message);
         hadError = true;
+    }
+
+    static void error(Token token, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
+        }
     }
 }

@@ -10,4 +10,7 @@ record Token(TokenType type, String lexeme, Object literal, int line) {
     public String lexeme() {
         return lexeme;
     }
+
+    @Override
+    public String literal() {return literal}
 }
