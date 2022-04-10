@@ -16,6 +16,13 @@ class Parser {
         this.tokens = tokens;
     }
 
+    Expr parse() {
+        try {
+            return expression();
+        } catch (ParseError error) {
+            return null;
+        }
+    }
     private Token peek() {
         return tokens.get(current);
     }
@@ -80,7 +87,7 @@ class Parser {
         while (match(BANG_EQUAL,EQUAL_EQUAL)) {
             Token operator = previous();
             Expr right = comparison();
-            expr = new Expr.Binary(expr,operator,expr);
+            expr = new Expr.Binary(expr,operator,right);
         }
         return expr;
     }
@@ -96,7 +103,7 @@ class Parser {
         while (match(GREATER,GREATER_EQUAL,LESS,LESS_EQUAL)) {
             Token operator = previous();
             Expr right = term();
-            expr = new Expr.Binary(expr,operator,expr);
+            expr = new Expr.Binary(expr,operator,right);
         }
 
         return expr;
@@ -112,7 +119,7 @@ class Parser {
         while (match(MINUS,PLUS)) {
             Token operator = previous();
             Expr right = factor();
-            expr = new Expr.Binary(expr,operator,expr);
+            expr = new Expr.Binary(expr,operator,right);
         }
 
         return expr;
@@ -128,7 +135,7 @@ class Parser {
         while (match(STAR,SLASH)) {
             Token operator = previous();
             Expr right = unary();
-            expr = new Expr.Binary(expr,operator,expr);
+            expr = new Expr.Binary(expr,operator,right);
         }
 
         return expr;
@@ -165,7 +172,7 @@ class Parser {
             return new Expr.Grouping(expr);
         }
 
-        throw error(peek(),"Error");
+        throw error(peek(),"Expect Expression.");
     }
 
     private Token consume(TokenType type, String message) {
@@ -176,5 +183,28 @@ class Parser {
     private ParseError error(Token token, String message) {
         Lox.error(token,message);
         return new ParseError();
+    }
+
+    // skip all the
+    // code within a statement
+    // to continue parsing
+
+    private void synchronize() {
+        advance();
+        while (!isAtEnd()) {
+            if (previous().type() == SEMICOLON) return;
+            switch (peek().type()) {
+                case CLASS :
+                case FUN:
+                case VAR:
+                case FOR:
+                case IF:
+                case WHILE:
+                case PRINT:
+                case RETURN:
+                    return;
+            }
+           advance();
+        }
     }
 }

@@ -3,18 +3,6 @@ package com.languainsta.lox;
 // Visitor<String> because want to return string
 public class AstPrinter implements Expr.Visitor<String>{
 
-    public static void main(String[] args) {
-        // creating a new expression to parse
-        Expr expression = new Expr.Binary(
-                new Expr.Unary(
-                        new Token(TokenType.MINUS, "-", null, 1),
-                        new Expr.Literal(25)),
-                new Token(TokenType.STAR, "*", null, 1),
-                new Expr.Literal(45));
-
-        System.out.println(new AstPrinter().print(expression));
-    }
-
     String print(Expr expr) {
         return expr.accept(this);
     }
