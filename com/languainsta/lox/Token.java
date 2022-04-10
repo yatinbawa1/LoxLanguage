@@ -12,5 +12,18 @@ record Token(TokenType type, String lexeme, Object literal, int line) {
     }
 
     @Override
-    public String literal() {return literal}
+    public Object literal() {
+        return literal;
+    }
+
+    @Override
+    public TokenType type() {
+        return type;
+    }
+
+    @Override
+    public int line() {
+        return line;
+    }
+
 }

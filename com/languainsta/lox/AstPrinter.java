@@ -1,16 +1,16 @@
 package com.languainsta.lox;
 
+// Visitor<String> because want to return string
 public class AstPrinter implements Expr.Visitor<String>{
 
     public static void main(String[] args) {
-
+        // creating a new expression to parse
         Expr expression = new Expr.Binary(
                 new Expr.Unary(
                         new Token(TokenType.MINUS, "-", null, 1),
-                        new Expr.Literal(123)),
+                        new Expr.Literal(25)),
                 new Token(TokenType.STAR, "*", null, 1),
-                new Expr.Grouping(
-                        new Expr.Literal(45.67)));
+                new Expr.Literal(45));
 
         System.out.println(new AstPrinter().print(expression));
     }
@@ -41,13 +41,24 @@ public class AstPrinter implements Expr.Visitor<String>{
         return parenthesize(expr.operator.lexeme(),expr.right);
     }
 
-    private String parenthesize(String name, Expr... exprs) {
+    private String parenthesize(String operator, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("(").append(name);
+        builder.append("(").append(operator);
 
         for (Expr expr : exprs ) {
             builder.append(" ");
+            // recursively call all the other
+            // accept methods
+            // for example ->
+            // expr = Binary(Unary(-25),"*",Literal(45))
+            // Binary.accept(AstPrinter) -> visitBinaryExpr()
+            // -> parenthesize("*",Unary(-25),Literal(45))
+            // -> Unary.accept(astPrinter) && -> Literal.accept(AstPrinter))
+            // -> visitUnaryExpr("-",25) && -> visitLiteralExpr(45) -> return 45
+            // -> parenthesize(25)
+            // -> visitLiteralExpr -> 25
+            // Binary -> (* (- 25) 45)
             builder.append(expr.accept(this));
         }
 

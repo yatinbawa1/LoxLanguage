@@ -6,6 +6,7 @@ import static com.languainsta.lox.TokenType.*;
 
 class Parser {
     private static class ParseError extends RuntimeException {}
+
     private final List<Token> tokens;
     private int current = 0;
 
@@ -18,8 +19,8 @@ class Parser {
     }
 
     private Expr equality() {
-        Expr expr = comparison();
 
+        Expr expr = comparison();
         while (match(BANG_EQUAL,EQUAL_EQUAL)) {
             Token operator = previous();
             Expr right = comparison();
@@ -41,7 +42,7 @@ class Parser {
 
     private boolean check(TokenType type) {
         if (isAtEnd()) return false;
-        return peek().type == type;
+        return peek().type() == type;
     }
 
     private Token advance() {
@@ -50,7 +51,7 @@ class Parser {
     }
 
     private boolean isAtEnd() {
-        return peek().type == EOF;
+        return peek().type() == EOF;
     }
 
     private Token peek() {
@@ -120,12 +121,15 @@ class Parser {
             consume(RIGHT_PAREN, "Expect ')' after expression.");
             return new Expr.Grouping(expr);
         }
+
+        throw error(peek(),"Error");
     }
 
     private Token consume(TokenType type, String message) {
         if (check(type)) return advance();
         throw error(peek(),message);
     }
+
     private ParseError error(Token token, String message) {
         Lox.error(token,message);
         return new ParseError();
