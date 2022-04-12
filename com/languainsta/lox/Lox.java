@@ -11,6 +11,9 @@ import java.util.List;
 public class Lox {
 
     static boolean hadError = false; // check if error has taken place
+    static boolean hadRuntimeError = false;
+    private static final Interpreter interpreter = new Interpreter();
+
     public static void main(String[] args) throws IOException{
         if (args.length > 1) {
             System.out.println("Usage: lox [script]");
@@ -54,7 +57,7 @@ public class Lox {
         Expr expression = parser.parse();
 
         if (hadError) return;
-        System.out.println(new AstPrinter().print(expression));
+        interpreter.interpret(expression);
     }
 
     // Error function
@@ -72,9 +75,16 @@ public class Lox {
 
     static void error(Token token, String message) {
         if (token.type() == TokenType.EOF) {
-            report(token.line(), " at end", message);
+            report(token.line(), "at end", message);
         } else {
-            report(token.line(), " at '" + token.lexeme() + "'", message);
+            report(token.line(), "at '" + token.lexeme() + "'", message);
         }
     }
+
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() +
+                "\n[line " + error.token.line() + "]");
+        hadRuntimeError = true;
+    }
+
 }
